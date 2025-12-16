@@ -39,6 +39,10 @@ public class Bar {
         employees.add(employee);
     }
 
+    public List<Employee> getEmployees() {
+        return new ArrayList<>(employees); // retourne une copie
+    }
+
     // ===== Passage de commande =====
     public Optional<Order> placeOrder(Client client, List<String> cocktailNames) {
         List<Cocktail> selected = new ArrayList<>();

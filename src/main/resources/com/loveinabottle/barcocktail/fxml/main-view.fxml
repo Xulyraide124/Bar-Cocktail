@@ -1,16 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<?import javafx.scene.control.Button?>
-<VBox alignment="CENTER" spacing="20.0" xmlns:fx="http://javafx.com/fxml"
-      fx:controller="com.loveinabottle.barcocktail.HelloController">
-    <padding>
-        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
-    </padding>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.loveinabottle.barcocktail.HelloController"
+            prefWidth="900.0" prefHeight="600.0">
 
-    <Label fx:id="welcomeText"/>
-    <Button text="Hello!" onAction="#onHelloButtonClick"/>
-</VBox>
+    <!-- Top: Title -->
+    <top>
+        <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
+            <Label text="Love in a Bottle - Bar à Cocktails" style="-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Label fx:id="statusLabel" text="Bienvenue dans votre bar !" style="-fx-font-size: 14px; -fx-text-fill: #ecf0f1;"/>
+        </VBox>
+    </top>
+
+    <!-- Center: Main Content -->
+    <center>
+        <TabPane tabClosingPolicy="UNAVAILABLE">
+
+            <!-- Tab 1: Menu des Cocktails -->
+            <Tab text="Menu des Cocktails">
+                <VBox spacing="15.0" style="-fx-padding: 20;">
+                    <Label text="Menu des Cocktails" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <ListView fx:id="cocktailListView" prefHeight="300.0"/>
+                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                        <Label text="Détails:"/>
+                        <TextArea fx:id="cocktailDetailsArea" prefHeight="100.0" prefWidth="400.0" editable="false"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 2: Stock d'Ingrédients -->
+            <Tab text="Stock d'Ingrédients">
+                <VBox spacing="15.0" style="-fx-padding: 20;">
+                    <Label text="Stock d'Ingrédients" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <ListView fx:id="ingredientListView" prefHeight="350.0"/>
+                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                        <Button text="Réapprovisionner (+10)" onAction="#onRestockIngredient"/>
+                        <Label fx:id="ingredientStatusLabel" text=""/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 3: Commandes -->
+            <Tab text="Passer une Commande">
+                <VBox spacing="15.0" style="-fx-padding: 20;">
+                    <Label text="Nouvelle Commande" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+                    <HBox spacing="10.0" alignment="CENTER_LEFT">
+                        <Label text="Nom du Client:"/>
+                        <TextField fx:id="clientNameField" promptText="Entrez le nom du client" prefWidth="200.0"/>
+                    </HBox>
+
+                    <Label text="Sélectionner les cocktails:"/>
+                    <ListView fx:id="orderCocktailListView" prefHeight="200.0"/>
+
+                    <HBox spacing="10.0" alignment="CENTER">
+                        <Button text="Créer la Commande" onAction="#onCreateOrder"
+                                style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                        <Button text="Préparer la Commande" onAction="#onPrepareOrder"
+                                fx:id="prepareOrderButton" disable="true"
+                                style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                    </HBox>
+
+                    <Separator/>
+
+                    <Label text="Détails de la commande:"/>
+                    <TextArea fx:id="orderDetailsArea" prefHeight="150.0" editable="false"/>
+                </VBox>
+            </Tab>
+
+            <!-- Tab 4: Employés -->
+            <Tab text="Employés">
+                <VBox spacing="15.0" style="-fx-padding: 20;">
+                    <Label text="Personnel du Bar" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <ListView fx:id="employeeListView" prefHeight="400.0"/>
+                </VBox>
+            </Tab>
+
+        </TabPane>
+    </center>
+
+    <!-- Bottom: Actions Bar -->
+    <bottom>
+        <HBox spacing="15.0" alignment="CENTER" style="-fx-background-color: #34495e; -fx-padding: 15;">
+            <Button text="Rafraîchir" onAction="#onRefresh"
+                    style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+            <Label fx:id="totalOrderLabel" text="Total commande: 0.00 €"
+                   style="-fx-text-fill: white; -fx-font-weight: bold; -fx-font-size: 14px;"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>
