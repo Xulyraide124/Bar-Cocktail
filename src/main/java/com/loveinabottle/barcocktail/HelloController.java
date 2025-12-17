@@ -55,11 +55,13 @@ public class HelloController {
     @FXML
     private VBox waitingOrdersContainer;
     @FXML
-    private VBox completedOrdersContainer;
-    @FXML
     private Label statsLabel;
 
-    // ===== Initialisation =====
+    // ===== Tab 5: Caisse =====
+    @FXML
+    private VBox cashboxOrdersContainer;
+    @FXML
+    private Label totalRevenueLabel;
 
     public void setBar(Bar bar) {
         this.bar = bar;
@@ -155,7 +157,8 @@ public class HelloController {
     private void updateDashboard() {
         updateInProgressOrders();
         updateWaitingOrders();
-        updateCompletedOrders();
+        updateCashboxOrders();
+        updateTotalRevenue();
         updateStats();
     }
 
@@ -189,22 +192,28 @@ public class HelloController {
         }
     }
 
-    private void updateCompletedOrders() {
-        completedOrdersContainer.getChildren().clear();
+    private void updateCashboxOrders() {
+        cashboxOrdersContainer.getChildren().clear();
 
-        // Afficher les 5 dernières commandes terminées
-        bar.getCompletedOrders().stream()
-                .skip(Math.max(0, bar.getCompletedOrders().size() - 5))
-                .forEach(order -> {
-                    VBox orderBox = createOrderDisplay(order, false);
-                    completedOrdersContainer.getChildren().add(orderBox);
-                });
+        // Afficher toutes les commandes terminées
+        bar.getCompletedOrders().forEach(order -> {
+            VBox orderBox = createOrderDisplay(order, false);
+            cashboxOrdersContainer.getChildren().add(orderBox);
+        });
 
         if (bar.getCompletedOrders().isEmpty()) {
             Label label = new Label("Aucune commande terminée");
             label.setStyle("-fx-text-fill: #95a5a6; -fx-font-style: italic;");
-            completedOrdersContainer.getChildren().add(label);
+            cashboxOrdersContainer.getChildren().add(label);
         }
+    }
+
+    private void updateTotalRevenue() {
+        double totalRevenue = 0;
+        for (Order order : bar.getCompletedOrders()) {
+            totalRevenue += order.calculateTotal();
+        }
+        totalRevenueLabel.setText(String.format("%.2f €", totalRevenue));
     }
 
     private VBox createOrderDisplay(Order order, boolean showProgress) {
@@ -267,6 +276,11 @@ public class HelloController {
         );
         box.getChildren().add(statusLabel);
 
+        // Prix total de la commande
+        Label priceLabel = new Label("💰 Total: " + String.format("%.2f €", order.calculateTotal()));
+        priceLabel.setStyle("-fx-font-size: 10px; -fx-text-fill: #27ae60; -fx-font-weight: bold;");
+        box.getChildren().add(priceLabel);
+
         return box;
     }
 
@@ -280,9 +294,9 @@ public class HelloController {
     // ===== Rafraîchissement des données =====
 
     @FXML
-    private void onRefresh() {
-        refreshAllData();
-        statusLabel.setText("Données rafraîchies !");
+    private void onCloseBar() {
+        showAlert("Au Revoir", "Merci d'avoir utilisé Love in a Bottle !\nÀ bientôt !");
+        javafx.application.Platform.exit();
     }
 
     private void refreshAllData() {

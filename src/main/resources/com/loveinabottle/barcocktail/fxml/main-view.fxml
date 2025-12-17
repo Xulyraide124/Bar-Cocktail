@@ -12,8 +12,8 @@
         <VBox alignment="CENTER" spacing="10.0" style="-fx-background-color: #2c3e50; -fx-padding: 20;">
             <Label text="Love in a Bottle - Bar à Cocktails" style="-fx-font-size: 24px; -fx-text-fill: white; -fx-font-weight: bold;"/>
             <Label fx:id="statusLabel" text="Bienvenue dans votre bar !" style="-fx-font-size: 14px; -fx-text-fill: #ecf0f1;"/>
-            <Button text="Rafraîchir" onAction="#onRefresh"
-                    style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+            <Button text="Fermer le bar" onAction="#onCloseBar"
+                    style="-fx-background-color: #e74c3c; -fx-text-fill: white;"/>
         </VBox>
     </top>
 
@@ -84,6 +84,20 @@
                 </VBox>
             </Tab>
 
+            <!-- Tab 5: Caisse -->
+            <Tab text="Caisse">
+                <VBox spacing="15.0" style="-fx-padding: 20;">
+                    <Label text="Historique des Commandes - Caisse" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+                    <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: white;">
+                        <VBox fx:id="cashboxOrdersContainer" spacing="8.0" style="-fx-padding: 5;"/>
+                    </ScrollPane>
+                    <HBox spacing="20.0" alignment="CENTER_LEFT" style="-fx-padding: 12; -fx-background-color: #ecf0f1; -fx-border-color: #95a5a6; -fx-border-width: 1; -fx-border-radius: 3;">
+                        <Label text="Total de la Journée:" style="-fx-font-size: 14px; -fx-font-weight: bold;"/>
+                        <Label fx:id="totalRevenueLabel" text="0.00 €" style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #27ae60;"/>
+                    </HBox>
+                </VBox>
+            </Tab>
+
         </TabPane>
     </center>
 
@@ -111,20 +125,11 @@
                         </ScrollPane>
                     </VBox>
                 </TitledPane>
-
-                <!-- Commandes terminées -->
-                <TitledPane text="✅ Terminées" style="-fx-text-fill: #27ae60; -fx-font-weight: bold;" collapsible="false" HBox.hgrow="ALWAYS">
-                    <VBox spacing="8.0" style="-fx-padding: 10;">
-                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: white;">
-                            <VBox fx:id="completedOrdersContainer" spacing="8.0" style="-fx-padding: 5;"/>
-                        </ScrollPane>
-                    </VBox>
-                </TitledPane>
             </HBox>
 
             <!-- Statistiques -->
             <HBox spacing="20.0" alignment="CENTER_LEFT" style="-fx-padding: 8; -fx-background-color: white; -fx-border-color: #bdc3c7; -fx-border-width: 1; -fx-border-radius: 3;">
-                <Label fx:id="statsLabel" text="En cours: 0 | En attente: 0 | Terminées: 0"
+                <Label fx:id="statsLabel" text="En cours: 0 | En attente: 0"
                        style="-fx-font-size: 11px; -fx-text-fill: #7f8c8d;"/>
             </HBox>
         </VBox>
