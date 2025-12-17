@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
 
         // Charger le FXML
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 700, 700);
+        Scene scene = new Scene(fxmlLoader.load(), 1000, 1000);
 
         // Injecter le bar dans le contrôleur
         HelloController controller = fxmlLoader.getController();
@@ -104,9 +104,9 @@ public class HelloApplication extends Application {
         bar.addCocktailToMenu(vodkaOrange);
 
         // ===== Créer des employés =====
-        Bartender bartender1 = new Bartender("B001", "Jean-Pierre", 8);
-        Bartender bartender2 = new Bartender("B002", "Marie", 10);
-        Bartender bartender3 = new Bartender("B003", "Lucas", 7);
+        Bartender bartender1 = new Bartender("B001", "Jean-Pierre", 1);
+        Bartender bartender2 = new Bartender("B002", "Marie", 7);
+        Bartender bartender3 = new Bartender("B003", "Lucas", 3);
 
         bar.addEmployee(bartender1);
         bar.addEmployee(bartender2);

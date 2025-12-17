@@ -94,20 +94,20 @@
                    style="-fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: #2c3e50;"/>
 
             <HBox spacing="15.0" style="-fx-fill-height: true;" VBox.vgrow="ALWAYS">
-                <!-- Commandes en cours -->
-                <TitledPane text="🍹 En Cours (Max 3)" style="-fx-text-fill: #3498db; -fx-font-weight: bold;" collapsible="false" HBox.hgrow="ALWAYS">
-                    <VBox spacing="8.0" style="-fx-padding: 10;">
-                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: white;">
-                            <VBox fx:id="inProgressOrdersContainer" spacing="8.0" style="-fx-padding: 5;"/>
-                        </ScrollPane>
-                    </VBox>
-                </TitledPane>
-
                 <!-- File d'attente -->
                 <TitledPane text="⏳ En Attente" style="-fx-text-fill: #e67e22; -fx-font-weight: bold;" collapsible="false" HBox.hgrow="ALWAYS">
                     <VBox spacing="8.0" style="-fx-padding: 10;">
                         <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: white;">
                             <VBox fx:id="waitingOrdersContainer" spacing="8.0" style="-fx-padding: 5;"/>
+                        </ScrollPane>
+                    </VBox>
+                </TitledPane>
+
+                <!-- Commandes en cours -->
+                <TitledPane text="🍹 En Cours" style="-fx-text-fill: #3498db; -fx-font-weight: bold;" collapsible="false" HBox.hgrow="ALWAYS">
+                    <VBox spacing="8.0" style="-fx-padding: 10;">
+                        <ScrollPane fitToWidth="true" VBox.vgrow="ALWAYS" style="-fx-control-inner-background: white;">
+                            <VBox fx:id="inProgressOrdersContainer" spacing="8.0" style="-fx-padding: 5;"/>
                         </ScrollPane>
                     </VBox>
                 </TitledPane>

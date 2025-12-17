@@ -139,6 +139,9 @@ public class HelloController {
     // ===== Configuration du Tableau de Bord des Commandes =====
 
     private void setupOrderDashboard() {
+        // Listener pour les commandes en attente
+        bar.getWaitingOrders().addListener((ListChangeListener<Order>) c -> updateDashboard());
+
         // Listener pour les commandes en cours
         bar.getInProgressOrders().addListener((ListChangeListener<Order>) c -> updateDashboard());
 
@@ -401,11 +404,20 @@ public class HelloController {
         bar.submitOrderForPreparation(currentOrder);
 
         double total = bar.billOrder(currentOrder);
+
+        // Déterminer le message selon si la commande démarre immédiatement ou non
+        String statusMessage;
+        if (bar.getWaitingOrders().contains(currentOrder)) {
+            statusMessage = "Commande en file d'attente.\nPosition: " + (bar.getWaitingOrders().indexOf(currentOrder) + 1);
+        } else {
+            statusMessage = "Commande démarrée immédiatement !";
+        }
+
         showAlert("Succès",
-                 "Commande ajoutée à la file d'attente !\n\n" +
+                 "Commande ajoutée avec succès !\n\n" +
                  "Client: " + currentOrder.getClient().getName() + "\n" +
                  "Total: " + String.format("%.2f €", total) + "\n\n" +
-                 "Position dans la file: " + bar.getWaitingOrders().size());
+                 statusMessage);
 
         // Réinitialiser
         currentOrder = null;

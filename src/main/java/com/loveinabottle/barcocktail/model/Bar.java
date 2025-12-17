@@ -10,21 +10,36 @@ import java.util.*;
 import java.util.concurrent.*;
 
 public class Bar {
-    private static final int MAX_CONCURRENT_ORDERS = 3;
-    private static final int BASE_TIME_PER_INGREDIENT_MS = 500;
+    private static final int BASE_TIME_PER_INGREDIENT_MS = 20000;
 
     private final List<Ingredient> stock = new ArrayList<>();
     private final List<Cocktail> menu = new ArrayList<>();
     private final List<Employee> employees = new ArrayList<>();
 
-    private final Queue<Order> waitingQueue = new ConcurrentLinkedQueue<>();
+    private final ListProperty<Order> waitingQueue = new SimpleListProperty<>(
+            FXCollections.observableArrayList()
+    );
     private final ListProperty<Order> inProgressOrders = new SimpleListProperty<>(
             FXCollections.observableArrayList()
     );
     private final ListProperty<Order> completedOrders = new SimpleListProperty<>(
             FXCollections.observableArrayList()
     );
-    private final ExecutorService executorService = Executors.newFixedThreadPool(MAX_CONCURRENT_ORDERS);
+    private ExecutorService executorService;
+
+    public Bar() {
+        // Initialiser avec au moins 1 thread
+        int bartenderCount = Math.max(1, countBartenders());
+        executorService = Executors.newFixedThreadPool(bartenderCount);
+    }
+
+    private int countBartenders() {
+        return (int) employees.stream().filter(e -> e instanceof Bartender).count();
+    }
+
+    private int getMaxConcurrentOrders() {
+        return Math.max(1, countBartenders());
+    }
 
     // ===== Gestion du stock =====
     public void addIngredient(Ingredient ingredient) {
@@ -54,6 +69,12 @@ public class Bar {
     // ===== Gestion des employés =====
     public void addEmployee(Employee employee) {
         employees.add(employee);
+        // Recréer le thread pool si c'est un bartender
+        if (employee instanceof Bartender) {
+            executorService.shutdown();
+            int bartenderCount = countBartenders();
+            executorService = Executors.newFixedThreadPool(bartenderCount);
+        }
     }
 
     public List<Employee> getEmployees() {
@@ -65,8 +86,8 @@ public class Bar {
         return inProgressOrders;
     }
 
-    public Queue<Order> getWaitingOrders() {
-        return new LinkedList<>(waitingQueue);
+    public ObservableList<Order> getWaitingOrders() {
+        return waitingQueue;
     }
 
     public ObservableList<Order> getCompletedOrders() {
@@ -94,18 +115,21 @@ public class Bar {
     // ===== Soumission de commande à la file d'attente =====
     public void submitOrderForPreparation(Order order) {
         order.setStatus(Order.OrderStatus.QUEUED);
-        waitingQueue.offer(order);
+        waitingQueue.add(order);
         processNextOrder();
     }
 
     // ===== Traitement des commandes en file d'attente =====
     private synchronized void processNextOrder() {
-        if (inProgressOrders.size() >= MAX_CONCURRENT_ORDERS) {
-            return;
+        // Vérifier qu'on a de la place
+        int maxOrders = getMaxConcurrentOrders();
+        if (inProgressOrders.size() >= maxOrders) {
+            return; // Pas de place, les commandes restent en attente
         }
 
-        Order nextOrder = waitingQueue.poll();
-        if (nextOrder != null) {
+        // Prendre la prochaine commande en attente
+        if (!waitingQueue.isEmpty()) {
+            Order nextOrder = waitingQueue.remove(0); // Retirer la première commande (FIFO)
             startOrderPreparation(nextOrder);
         }
     }
