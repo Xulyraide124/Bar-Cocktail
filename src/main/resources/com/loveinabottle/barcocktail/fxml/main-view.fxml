@@ -25,9 +25,8 @@
             <Tab text="Menu des Cocktails">
                 <VBox spacing="15.0" style="-fx-padding: 20;">
                     <Label text="Menu des Cocktails" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
-                    <ListView fx:id="cocktailListView" prefHeight="300.0"/>
-                    <Label text="Détails:"/>
                     <HBox spacing="20.0" alignment="CENTER_LEFT">
+                        <ListView fx:id="cocktailListView" prefHeight="300.0"/>
                         <TextArea fx:id="cocktailDetailsArea" prefHeight="365.0" prefWidth="400.0" editable="true"/>
                     </HBox>
                 </VBox>
