@@ -19,7 +19,7 @@ public class HelloApplication extends Application {
 
         // Charger le FXML
         FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("fxml/main-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1000, 720);
+        Scene scene = new Scene(fxmlLoader.load(), 780, 600);
 
         // Injecter le bar dans le contrôleur
         HelloController controller = fxmlLoader.getController();
